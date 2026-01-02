@@ -1,0 +1,17 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\intermediate\\build\\win64\\unrealeditor\\inc\\liminalroomgen\\uht\\liminalroomgenerator.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "u:\\unreal projects\\liminal\\intermediate\\build\\win64\\x64\\shootingplugineditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\liminalroomgen\\definitions.liminalroomgen.h",
+            "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\source\\liminalroomgen\\public\\liminalroomgenerator.h",
+            "c:\\program files\\epic games\\ue_5.6\\engine\\source\\runtime\\engine\\classes\\engine\\levelstreamingdynamic.h",
+            "c:\\program files\\epic games\\ue_5.6\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\levelstreamingdynamic.generated.h",
+            "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\intermediate\\build\\win64\\unrealeditor\\inc\\liminalroomgen\\uht\\liminalroomgenerator.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

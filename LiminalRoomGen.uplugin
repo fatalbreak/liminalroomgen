@@ -1,0 +1,18 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0.0",
+  "FriendlyName": "Liminal Room Generator",
+  "Description": "Standalone room/maze generator: start -> path -> exit transition -> exit, plus walls and ceilings.",
+  "Category": "Gameplay",
+  "CanContainContent": false,
+  "IsBetaVersion": true,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "LiminalRoomGen",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

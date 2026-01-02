@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\intermediate\\build\\win64\\unrealeditor\\inc\\liminalroomgen\\uht\\liminalroomgen.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "u:\\unreal projects\\liminal\\intermediate\\build\\win64\\x64\\shootingplugineditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "u:\\unreal projects\\liminal\\plugins\\liminalroomgen\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\liminalroomgen\\definitions.liminalroomgen.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

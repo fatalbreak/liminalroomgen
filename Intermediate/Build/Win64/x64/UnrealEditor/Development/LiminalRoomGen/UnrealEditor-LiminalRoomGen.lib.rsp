@@ -1,0 +1,16 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-LiminalRoomGen.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"U:/Unreal Projects/Liminal/Intermediate/Build/Win64/x64/ShootingPluginEditor/Development/UnrealEd/SharedPCH.UnrealEd.Project.ValApi.ValExpApi.Cpp20.InclOrderUnreal5_3.h.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/LiminalRoomGen.cpp.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/LiminalRoomGenerator.cpp.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/PerModuleInline.gen.cpp.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/LiminalRoomGen.init.gen.cpp.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/LiminalRoomGenerator.gen.cpp.obj"
+"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/Default.rc2.res"
+/OUT:"U:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/Intermediate/Build/Win64/x64/UnrealEditor/Development/LiminalRoomGen/UnrealEditor-LiminalRoomGen.lib"
