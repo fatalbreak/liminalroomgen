@@ -16,6 +16,8 @@
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
+class UWorld;
+
 // ********** Begin ScriptStruct FLiminalCell ******************************************************
 #define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_29_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FLiminalCell_Statics; \
@@ -27,16 +29,45 @@ struct FLiminalCell;
 
 // ********** Begin Delegate FLiminalGenerationComplete ********************************************
 #define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_36_DELEGATE \
-LIMINALROOMGEN_API void FLiminalGenerationComplete_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationComplete);
+LIMINALROOMGEN_API void FLiminalGenerationComplete_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationComplete, const TSoftObjectPtr<UWorld>& StartLevel);
 
 
 // ********** End Delegate FLiminalGenerationComplete **********************************************
 
+// ********** Begin Delegate FLiminalGenerationStarted *********************************************
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_39_DELEGATE \
+LIMINALROOMGEN_API void FLiminalGenerationStarted_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationStarted);
+
+
+// ********** End Delegate FLiminalGenerationStarted ***********************************************
+
+// ********** Begin Delegate FLiminalFirstRoomSpawned **********************************************
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_42_DELEGATE \
+LIMINALROOMGEN_API void FLiminalFirstRoomSpawned_DelegateWrapper(const FMulticastScriptDelegate& LiminalFirstRoomSpawned);
+
+
+// ********** End Delegate FLiminalFirstRoomSpawned ************************************************
+
+// ********** Begin Delegate FLiminalGenerationStopped *********************************************
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_45_DELEGATE \
+LIMINALROOMGEN_API void FLiminalGenerationStopped_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationStopped);
+
+
+// ********** End Delegate FLiminalGenerationStopped ***********************************************
+
+// ********** Begin Delegate FLiminalTestDelegate **************************************************
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_48_DELEGATE \
+LIMINALROOMGEN_API void FLiminalTestDelegate_DelegateWrapper(const FMulticastScriptDelegate& LiminalTestDelegate, const FString& TestMessage);
+
+
+// ********** End Delegate FLiminalTestDelegate ****************************************************
+
 // ********** Begin Class ALiminalRoomGenerator ****************************************************
-#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execHandleOneStreamedLevelLoaded); \
 	DECLARE_FUNCTION(execGetExitCell); \
 	DECLARE_FUNCTION(execGetStartCell); \
+	DECLARE_FUNCTION(execTestDelegateSystem); \
 	DECLARE_FUNCTION(execClearRuntime); \
 	DECLARE_FUNCTION(execGenerateRuntime); \
 	DECLARE_FUNCTION(execClearGeneration); \
@@ -45,7 +76,7 @@ LIMINALROOMGEN_API void FLiminalGenerationComplete_DelegateWrapper(const FMultic
 
 LIMINALROOMGEN_API UClass* Z_Construct_UClass_ALiminalRoomGenerator_NoRegister();
 
-#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_INCLASS_NO_PURE_DECLS \
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesALiminalRoomGenerator(); \
 	friend struct Z_Construct_UClass_ALiminalRoomGenerator_Statics; \
@@ -56,7 +87,7 @@ public: \
 	DECLARE_SERIALIZER(ALiminalRoomGenerator)
 
 
-#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_ENHANCED_CONSTRUCTORS \
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	ALiminalRoomGenerator(ALiminalRoomGenerator&&) = delete; \
 	ALiminalRoomGenerator(const ALiminalRoomGenerator&) = delete; \
@@ -66,13 +97,13 @@ public: \
 	NO_API virtual ~ALiminalRoomGenerator();
 
 
-#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_38_PROLOG
-#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_GENERATED_BODY \
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_50_PROLOG
+#define FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_INCLASS_NO_PURE_DECLS \
-	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_41_ENHANCED_CONSTRUCTORS \
+	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_INCLASS_NO_PURE_DECLS \
+	FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h_53_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

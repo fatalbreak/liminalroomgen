@@ -21,7 +21,11 @@ LIMINALROOMGEN_API UClass* Z_Construct_UClass_ALiminalRoomGenerator();
 LIMINALROOMGEN_API UClass* Z_Construct_UClass_ALiminalRoomGenerator_NoRegister();
 LIMINALROOMGEN_API UEnum* Z_Construct_UEnum_LiminalRoomGen_ELiminalCellType();
 LIMINALROOMGEN_API UEnum* Z_Construct_UEnum_LiminalRoomGen_ELiminalPrefabForwardAxis();
+LIMINALROOMGEN_API UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature();
 LIMINALROOMGEN_API UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature();
+LIMINALROOMGEN_API UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature();
+LIMINALROOMGEN_API UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature();
+LIMINALROOMGEN_API UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature();
 LIMINALROOMGEN_API UScriptStruct* Z_Construct_UScriptStruct_FLiminalCell();
 UPackage* Z_Construct_UPackage__Script_LiminalRoomGen();
 // ********** End Cross Module References **********************************************************
@@ -207,6 +211,10 @@ UScriptStruct* Z_Construct_UScriptStruct_FLiminalCell()
 // ********** Begin Delegate FLiminalGenerationComplete ********************************************
 struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics
 {
+	struct _Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms
+	{
+		TSoftObjectPtr<UWorld> StartLevel;
+	};
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
 #if !UE_BUILD_SHIPPING
@@ -218,9 +226,17 @@ struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__D
 #endif
 	};
 #endif // WITH_METADATA
+	static const UECodeGen_Private::FSoftObjectPropertyParams NewProp_StartLevel;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static const UECodeGen_Private::FDelegateFunctionParams FuncParams;
 };
-const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalGenerationComplete__DelegateSignature", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::Function_MetaDataParams)},  };
+const UECodeGen_Private::FSoftObjectPropertyParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::NewProp_StartLevel = { "StartLevel", nullptr, (EPropertyFlags)0x0014000000000080, UECodeGen_Private::EPropertyGenFlags::SoftObject, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(_Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms, StartLevel), Z_Construct_UClass_UWorld_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::NewProp_StartLevel,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalGenerationComplete__DelegateSignature", Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::PropPointers), sizeof(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::_Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature_Statics::_Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms) < MAX_uint16);
 UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature()
 {
 	static UFunction* ReturnFunction = nullptr;
@@ -230,11 +246,163 @@ UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplet
 	}
 	return ReturnFunction;
 }
-void FLiminalGenerationComplete_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationComplete)
+void FLiminalGenerationComplete_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationComplete, const TSoftObjectPtr<UWorld>& StartLevel)
 {
-	LiminalGenerationComplete.ProcessMulticastDelegate<UObject>(NULL);
+	struct _Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms
+	{
+		TSoftObjectPtr<UWorld> StartLevel;
+	};
+	_Script_LiminalRoomGen_eventLiminalGenerationComplete_Parms Parms;
+	Parms.StartLevel=StartLevel;
+	LiminalGenerationComplete.ProcessMulticastDelegate<UObject>(&Parms);
 }
 // ********** End Delegate FLiminalGenerationComplete **********************************************
+
+// ********** Begin Delegate FLiminalGenerationStarted *********************************************
+struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// Fired when generation starts.\n" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Fired when generation starts." },
+#endif
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FDelegateFunctionParams FuncParams;
+};
+const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalGenerationStarted__DelegateSignature", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUDelegateFunction(&ReturnFunction, Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+void FLiminalGenerationStarted_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationStarted)
+{
+	LiminalGenerationStarted.ProcessMulticastDelegate<UObject>(NULL);
+}
+// ********** End Delegate FLiminalGenerationStarted ***********************************************
+
+// ********** Begin Delegate FLiminalFirstRoomSpawned **********************************************
+struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// Fired when the first room is spawned.\n" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Fired when the first room is spawned." },
+#endif
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FDelegateFunctionParams FuncParams;
+};
+const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalFirstRoomSpawned__DelegateSignature", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUDelegateFunction(&ReturnFunction, Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+void FLiminalFirstRoomSpawned_DelegateWrapper(const FMulticastScriptDelegate& LiminalFirstRoomSpawned)
+{
+	LiminalFirstRoomSpawned.ProcessMulticastDelegate<UObject>(NULL);
+}
+// ********** End Delegate FLiminalFirstRoomSpawned ************************************************
+
+// ********** Begin Delegate FLiminalGenerationStopped *********************************************
+struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// Fired when generation stops (cleared).\n" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Fired when generation stops (cleared)." },
+#endif
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FDelegateFunctionParams FuncParams;
+};
+const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalGenerationStopped__DelegateSignature", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUDelegateFunction(&ReturnFunction, Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+void FLiminalGenerationStopped_DelegateWrapper(const FMulticastScriptDelegate& LiminalGenerationStopped)
+{
+	LiminalGenerationStopped.ProcessMulticastDelegate<UObject>(NULL);
+}
+// ********** End Delegate FLiminalGenerationStopped ***********************************************
+
+// ********** Begin Delegate FLiminalTestDelegate **************************************************
+struct Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics
+{
+	struct _Script_LiminalRoomGen_eventLiminalTestDelegate_Parms
+	{
+		FString TestMessage;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// Simple test delegate to verify delegate system works\n" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Simple test delegate to verify delegate system works" },
+#endif
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStrPropertyParams NewProp_TestMessage;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FDelegateFunctionParams FuncParams;
+};
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::NewProp_TestMessage = { "TestMessage", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(_Script_LiminalRoomGen_eventLiminalTestDelegate_Parms, TestMessage), METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::NewProp_TestMessage,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FDelegateFunctionParams Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UPackage__Script_LiminalRoomGen, nullptr, "LiminalTestDelegate__DelegateSignature", Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::PropPointers), sizeof(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::_Script_LiminalRoomGen_eventLiminalTestDelegate_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::_Script_LiminalRoomGen_eventLiminalTestDelegate_Parms) < MAX_uint16);
+UFunction* Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUDelegateFunction(&ReturnFunction, Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+void FLiminalTestDelegate_DelegateWrapper(const FMulticastScriptDelegate& LiminalTestDelegate, const FString& TestMessage)
+{
+	struct _Script_LiminalRoomGen_eventLiminalTestDelegate_Parms
+	{
+		FString TestMessage;
+	};
+	_Script_LiminalRoomGen_eventLiminalTestDelegate_Parms Parms;
+	Parms.TestMessage=TestMessage;
+	LiminalTestDelegate.ProcessMulticastDelegate<UObject>(&Parms);
+}
+// ********** End Delegate FLiminalTestDelegate ****************************************************
 
 // ********** Begin Class ALiminalRoomGenerator Function ClearGeneration ***************************
 struct Z_Construct_UFunction_ALiminalRoomGenerator_ClearGeneration_Statics
@@ -514,6 +682,58 @@ DEFINE_FUNCTION(ALiminalRoomGenerator::execHandleOneStreamedLevelLoaded)
 }
 // ********** End Class ALiminalRoomGenerator Function HandleOneStreamedLevelLoaded ****************
 
+// ********** Begin Class ALiminalRoomGenerator Function TestDelegateSystem ************************
+struct Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics
+{
+	struct LiminalRoomGenerator_eventTestDelegateSystem_Parms
+	{
+		FString TestMessage;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Liminal|Debug" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/** TEST: Call this from Blueprint to test if delegates work. */" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "TEST: Call this from Blueprint to test if delegates work." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TestMessage_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStrPropertyParams NewProp_TestMessage;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::NewProp_TestMessage = { "TestMessage", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(LiminalRoomGenerator_eventTestDelegateSystem_Parms, TestMessage), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TestMessage_MetaData), NewProp_TestMessage_MetaData) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::NewProp_TestMessage,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_ALiminalRoomGenerator, nullptr, "TestDelegateSystem", Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::PropPointers), sizeof(Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::LiminalRoomGenerator_eventTestDelegateSystem_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::Function_MetaDataParams), Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::LiminalRoomGenerator_eventTestDelegateSystem_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(ALiminalRoomGenerator::execTestDelegateSystem)
+{
+	P_GET_PROPERTY(FStrProperty,Z_Param_TestMessage);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->TestDelegateSystem(Z_Param_TestMessage);
+	P_NATIVE_END;
+}
+// ********** End Class ALiminalRoomGenerator Function TestDelegateSystem **************************
+
 // ********** Begin Class ALiminalRoomGenerator ****************************************************
 void ALiminalRoomGenerator::StaticRegisterNativesALiminalRoomGenerator()
 {
@@ -526,6 +746,7 @@ void ALiminalRoomGenerator::StaticRegisterNativesALiminalRoomGenerator()
 		{ "GetExitCell", &ALiminalRoomGenerator::execGetExitCell },
 		{ "GetStartCell", &ALiminalRoomGenerator::execGetStartCell },
 		{ "HandleOneStreamedLevelLoaded", &ALiminalRoomGenerator::execHandleOneStreamedLevelLoaded },
+		{ "TestDelegateSystem", &ALiminalRoomGenerator::execTestDelegateSystem },
 	};
 	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
@@ -909,6 +1130,36 @@ struct Z_Construct_UClass_ALiminalRoomGenerator_Statics
 		{ "ToolTip", "Prefab level for a ceiling segment (placed above each generated tile)." },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_GenerationStarted_MetaData[] = {
+		{ "Category", "Liminal|Generation" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/** Broadcast when generation starts. */" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Broadcast when generation starts." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FirstRoomSpawned_MetaData[] = {
+		{ "Category", "Liminal|Generation" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/** Broadcast when the first room is spawned. */" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Broadcast when the first room is spawned." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_GenerationStopped_MetaData[] = {
+		{ "Category", "Liminal|Generation" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/** Broadcast when generation stops (cleared). */" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Broadcast when generation stops (cleared)." },
+#endif
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_GenerationComplete_MetaData[] = {
 		{ "Category", "Liminal|Generation" },
 #if !UE_BUILD_SHIPPING
@@ -917,6 +1168,16 @@ struct Z_Construct_UClass_ALiminalRoomGenerator_Statics
 		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
 #if !UE_BUILD_SHIPPING
 		{ "ToolTip", "Broadcast after all spawned Level Instances for the most recent GenerateRuntime() call are loaded & visible." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TestDelegate_MetaData[] = {
+		{ "Category", "Liminal|Debug" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/** TEST: Simple test delegate to verify delegate system works. */" },
+#endif
+		{ "ModuleRelativePath", "Public/LiminalRoomGenerator.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "TEST: Simple test delegate to verify delegate system works." },
 #endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Debug_TotalSpawnedLevels_MetaData[] = {
@@ -1052,7 +1313,11 @@ struct Z_Construct_UClass_ALiminalRoomGenerator_Statics
 	static const UECodeGen_Private::FSoftObjectPropertyParams NewProp_ExitLevel;
 	static const UECodeGen_Private::FSoftObjectPropertyParams NewProp_WallLevel;
 	static const UECodeGen_Private::FSoftObjectPropertyParams NewProp_CeilingLevel;
+	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_GenerationStarted;
+	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_FirstRoomSpawned;
+	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_GenerationStopped;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_GenerationComplete;
+	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_TestDelegate;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_Debug_TotalSpawnedLevels;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_Debug_LoadedLevels;
 	static void NewProp_bDebugLogStreamingStatus_SetBit(void* Obj);
@@ -1083,6 +1348,7 @@ struct Z_Construct_UClass_ALiminalRoomGenerator_Statics
 		{ &Z_Construct_UFunction_ALiminalRoomGenerator_GetExitCell, "GetExitCell" }, // 207072676
 		{ &Z_Construct_UFunction_ALiminalRoomGenerator_GetStartCell, "GetStartCell" }, // 1919035914
 		{ &Z_Construct_UFunction_ALiminalRoomGenerator_HandleOneStreamedLevelLoaded, "HandleOneStreamedLevelLoaded" }, // 1417676048
+		{ &Z_Construct_UFunction_ALiminalRoomGenerator_TestDelegateSystem, "TestDelegateSystem" }, // 640197762
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -1170,7 +1436,11 @@ const UECodeGen_Private::FSoftObjectPropertyParams Z_Construct_UClass_ALiminalRo
 const UECodeGen_Private::FSoftObjectPropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_ExitLevel = { "ExitLevel", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::SoftObject, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, ExitLevel), Z_Construct_UClass_UWorld_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ExitLevel_MetaData), NewProp_ExitLevel_MetaData) };
 const UECodeGen_Private::FSoftObjectPropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_WallLevel = { "WallLevel", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::SoftObject, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, WallLevel), Z_Construct_UClass_UWorld_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WallLevel_MetaData), NewProp_WallLevel_MetaData) };
 const UECodeGen_Private::FSoftObjectPropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_CeilingLevel = { "CeilingLevel", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::SoftObject, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, CeilingLevel), Z_Construct_UClass_UWorld_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CeilingLevel_MetaData), NewProp_CeilingLevel_MetaData) };
-const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationComplete = { "GenerationComplete", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, GenerationComplete), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_GenerationComplete_MetaData), NewProp_GenerationComplete_MetaData) }; // 3468141314
+const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationStarted = { "GenerationStarted", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, GenerationStarted), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStarted__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_GenerationStarted_MetaData), NewProp_GenerationStarted_MetaData) }; // 3193739797
+const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_FirstRoomSpawned = { "FirstRoomSpawned", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, FirstRoomSpawned), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalFirstRoomSpawned__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FirstRoomSpawned_MetaData), NewProp_FirstRoomSpawned_MetaData) }; // 2331266269
+const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationStopped = { "GenerationStopped", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, GenerationStopped), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationStopped__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_GenerationStopped_MetaData), NewProp_GenerationStopped_MetaData) }; // 1490464053
+const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationComplete = { "GenerationComplete", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, GenerationComplete), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalGenerationComplete__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_GenerationComplete_MetaData), NewProp_GenerationComplete_MetaData) }; // 1899875562
+const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_TestDelegate = { "TestDelegate", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, TestDelegate), Z_Construct_UDelegateFunction_LiminalRoomGen_LiminalTestDelegate__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TestDelegate_MetaData), NewProp_TestDelegate_MetaData) }; // 2920502733
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_Debug_TotalSpawnedLevels = { "Debug_TotalSpawnedLevels", nullptr, (EPropertyFlags)0x0010000000002000, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, Debug_TotalSpawnedLevels), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Debug_TotalSpawnedLevels_MetaData), NewProp_Debug_TotalSpawnedLevels_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_Debug_LoadedLevels = { "Debug_LoadedLevels", nullptr, (EPropertyFlags)0x0010000000002000, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALiminalRoomGenerator, Debug_LoadedLevels), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Debug_LoadedLevels_MetaData), NewProp_Debug_LoadedLevels_MetaData) };
 void Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_bDebugLogStreamingStatus_SetBit(void* Obj)
@@ -1244,7 +1514,11 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ALiminalR
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_ExitLevel,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_WallLevel,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_CeilingLevel,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationStarted,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_FirstRoomSpawned,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationStopped,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_GenerationComplete,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_TestDelegate,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_Debug_TotalSpawnedLevels,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_Debug_LoadedLevels,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALiminalRoomGenerator_Statics::NewProp_bDebugLogStreamingStatus,
@@ -1306,10 +1580,10 @@ struct Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRo
 		{ FLiminalCell::StaticStruct, Z_Construct_UScriptStruct_FLiminalCell_Statics::NewStructOps, TEXT("LiminalCell"), &Z_Registration_Info_UScriptStruct_FLiminalCell, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FLiminalCell), 81449611U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ALiminalRoomGenerator, ALiminalRoomGenerator::StaticClass, TEXT("ALiminalRoomGenerator"), &Z_Registration_Info_UClass_ALiminalRoomGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ALiminalRoomGenerator), 98758760U) },
+		{ Z_Construct_UClass_ALiminalRoomGenerator, ALiminalRoomGenerator::StaticClass, TEXT("ALiminalRoomGenerator"), &Z_Registration_Info_UClass_ALiminalRoomGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ALiminalRoomGenerator), 3234891917U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_737919983(TEXT("/Script/LiminalRoomGen"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_995739867(TEXT("/Script/LiminalRoomGen"),
 	Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::ClassInfo),
 	Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::ScriptStructInfo),
 	Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Liminal_Plugins_LiminalRoomGen_Source_LiminalRoomGen_Public_LiminalRoomGenerator_h__Script_LiminalRoomGen_Statics::EnumInfo));

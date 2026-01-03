@@ -1,6 +1,10 @@
 #include "LiminalRoomGenerator.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "HAL/PlatformFilemanager.h"
+#include "Misc/FileHelper.h"
+#include "Misc/DateTime.h"
+#include "Misc/Paths.h"
 
 static const FIntPoint DirN(0, 1);
 static const FIntPoint DirS(0, -1);
@@ -30,6 +34,37 @@ static float DirToYawDegrees(const FIntPoint& Dir, ELiminalPrefabForwardAxis For
 	return CardinalDirToYawDegrees(Dir) + AxisOffset;
 }
 
+// #region agent log
+static void WriteDebugLog(const FString& Location, const FString& Message, const FString& DataJson)
+{
+	const FString DebugLogFilePath = TEXT("u:/Unreal Projects/Liminal/Plugins/LiminalRoomGen/.cursor/debug.log");
+	const int64 Timestamp = FDateTime::Now().ToUnixTimestamp() * 1000;
+	const FString LogLine = FString::Printf(TEXT("{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"%s\",\"message\":\"%s\",\"data\":%s,\"timestamp\":%lld}\n"), *Location, *Message, *DataJson, Timestamp);
+	FFileHelper::SaveStringToFile(LogLine, *DebugLogFilePath, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get(), EFileWrite::FILEWRITE_Append);
+}
+
+static void LogDelegateState(const FString& Location, const FString& DelegateName, const FMulticastScriptDelegate& Delegate)
+{
+	// For dynamic multicast delegates, check both C++ and Blueprint bindings
+	const TArray<UObject*>& BoundObjects = Delegate.GetAllObjects();
+	const int32 BoundCount = BoundObjects.Num();
+	
+	// Also check if the delegate has any invocations
+	FString BoundObjectNames;
+	for (UObject* Obj : BoundObjects)
+	{
+		if (Obj)
+		{
+			if (!BoundObjectNames.IsEmpty()) BoundObjectNames += TEXT(", ");
+			BoundObjectNames += Obj->GetName();
+		}
+	}
+	
+	WriteDebugLog(Location, FString::Printf(TEXT("Delegate state: %s"), *DelegateName), 
+		FString::Printf(TEXT("{\"boundCount\":%d,\"boundObjects\":\"%s\"}"), BoundCount, *BoundObjectNames));
+}
+// #endregion
+
 ALiminalRoomGenerator::ALiminalRoomGenerator()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -42,6 +77,20 @@ ALiminalRoomGenerator::ALiminalRoomGenerator()
 void ALiminalRoomGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:BeginPlay"), TEXT("BeginPlay called"), FString::Printf(TEXT("{\"instance\":\"%s\",\"world\":\"%s\"}"), *GetName(), GetWorld() ? *GetWorld()->GetName() : TEXT("NULL")));
+	
+	// Check delegate bindings at BeginPlay
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:BeginPlay"), TEXT("GenerationStarted"), GenerationStarted);
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:BeginPlay"), TEXT("FirstRoomSpawned"), FirstRoomSpawned);
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:BeginPlay"), TEXT("GenerationComplete"), GenerationComplete);
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:BeginPlay"), TEXT("GenerationStopped"), GenerationStopped);
+	// #endregion
+
+	// Test the delegate system immediately to verify it works
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] BeginPlay - Testing delegate system, Instance: %s"), *GetName());
+	TestDelegate.Broadcast(TEXT("BeginPlay Test"));
 
 	if (bGenerateOnBeginPlay)
 	{
@@ -95,6 +144,28 @@ void ALiminalRoomGenerator::GenerateRuntime(bool bClearFirst)
 	PendingStreamLoads = 0;
 	bGenerationCompleteBroadcasted = false;
 
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:101"), TEXT("GenerateRuntime entry"), FString::Printf(TEXT("{\"bClearFirst\":%d,\"this\":\"%s\"}"), bClearFirst ? 1 : 0, *GetName()));
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:117"), TEXT("GenerationStarted"), GenerationStarted);
+	// #endregion
+
+	// Broadcast generation started event
+	// For dynamic multicast delegates, Broadcast() should work even if GetAllObjects() returns 0
+	// This is because Blueprint bindings are stored in the script delegate system, not GetAllObjects()
+	const int32 BoundBeforeBroadcast = GenerationStarted.GetAllObjects().Num();
+	const bool bGenStartedIsBound = GenerationStarted.IsBound();
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] Broadcasting GenerationStarted - Bound count: %d, IsBound: %d, Instance: %s"), BoundBeforeBroadcast, bGenStartedIsBound ? 1 : 0, *GetName());
+	
+	// Always call Broadcast() - it's safe and will call Blueprint-bound functions even if GetAllObjects() is empty
+	GenerationStarted.Broadcast();
+	
+	const int32 BoundAfterBroadcast = GenerationStarted.GetAllObjects().Num();
+
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:120"), TEXT("GenerationStarted broadcast called"), 
+		FString::Printf(TEXT("{\"boundBefore\":%d,\"boundAfter\":%d}"), BoundBeforeBroadcast, BoundAfterBroadcast));
+	// #endregion
+
 	const int32 EffectiveSeed = bUseRandomSeed ? FMath::Rand() : Seed;
 	Rng.Initialize(EffectiveSeed);
 
@@ -128,7 +199,19 @@ void ALiminalRoomGenerator::GenerateRuntime(bool bClearFirst)
 	if (PendingStreamLoads == 0 && !bGenerationCompleteBroadcasted)
 	{
 		bGenerationCompleteBroadcasted = true;
-		GenerationComplete.Broadcast();
+		
+		// #region agent log
+		LogDelegateState(TEXT("LiminalRoomGenerator.cpp:153"), TEXT("GenerationComplete"), GenerationComplete);
+		// #endregion
+		
+		const int32 BoundBefore = GenerationComplete.GetAllObjects().Num();
+		const bool bGenCompleteIsBound = GenerationComplete.IsBound();
+		UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] Broadcasting GenerationComplete (immediate) - Bound count: %d, IsBound: %d, Instance: %s"), BoundBefore, bGenCompleteIsBound ? 1 : 0, *GetName());
+		GenerationComplete.Broadcast(StartLevel);
+
+		// #region agent log
+		WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:157"), TEXT("GenerationComplete broadcast called (immediate)"), FString::Printf(TEXT("{\"PendingStreamLoads\":%d,\"boundBefore\":%d}"), PendingStreamLoads, BoundBefore));
+		// #endregion
 	}
 
 	// Optional: flushing can stall/hang the editor on large layouts. Leave off unless you need immediate visibility.
@@ -144,6 +227,10 @@ void ALiminalRoomGenerator::GenerateRuntime(bool bClearFirst)
 
 void ALiminalRoomGenerator::ClearRuntime()
 {
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:159"), TEXT("ClearRuntime entry"), FString::Printf(TEXT("{\"SpawnedPrefabsCount\":%d}"), SpawnedPrefabs.Num()));
+	// #endregion
+
 	PendingStreamLoads = 0;
 	bGenerationCompleteBroadcasted = false;
 
@@ -160,6 +247,20 @@ void ALiminalRoomGenerator::ClearRuntime()
 
 	SpawnedPrefabs.Empty();
 	Grid.Empty();
+
+	// #region agent log
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:197"), TEXT("GenerationStopped"), GenerationStopped);
+	// #endregion
+
+	// Broadcast generation stopped event
+	const int32 BoundBefore = GenerationStopped.GetAllObjects().Num();
+	const bool bGenStoppedIsBound = GenerationStopped.IsBound();
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] Broadcasting GenerationStopped - Bound count: %d, IsBound: %d, Instance: %s"), BoundBefore, bGenStoppedIsBound ? 1 : 0, *GetName());
+	GenerationStopped.Broadcast();
+
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:202"), TEXT("GenerationStopped broadcast called"), FString::Printf(TEXT("{\"boundBefore\":%d}"), BoundBefore));
+	// #endregion
 }
 
 void ALiminalRoomGenerator::ResetGrid()
@@ -403,6 +504,10 @@ float ALiminalRoomGenerator::GetExitDirectionExtraYaw(const FIntPoint& Dir) cons
 
 ULevelStreamingDynamic* ALiminalRoomGenerator::SpawnLevelInstance(const TSoftObjectPtr<UWorld>& Level, const FVector& WorldLocation, const FRotator& WorldRotation, bool bBlockOnLoad)
 {
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:407"), TEXT("SpawnLevelInstance entry"), FString::Printf(TEXT("{\"levelPath\":\"%s\",\"worldLoc\":\"%s\",\"bBlockOnLoad\":%d}"), *Level.ToString(), *WorldLocation.ToString(), bBlockOnLoad ? 1 : 0));
+	// #endregion
+
 	if (Level.ToSoftObjectPath().IsNull())
 	{
 		return nullptr;
@@ -438,15 +543,29 @@ ULevelStreamingDynamic* ALiminalRoomGenerator::SpawnLevelInstance(const TSoftObj
 	}
 
 	SpawnedPrefabs.Add(Stream);
-	return Stream;
-
+	
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:444"), TEXT("Before incrementing Debug_TotalSpawnedLevels"), FString::Printf(TEXT("{\"currentValue\":%d}"), Debug_TotalSpawnedLevels));
+	// #endregion
+	
 	++Debug_TotalSpawnedLevels;
+	
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:446"), TEXT("After incrementing Debug_TotalSpawnedLevels"), FString::Printf(TEXT("{\"newValue\":%d}"), Debug_TotalSpawnedLevels));
+	// #endregion
+	
+	return Stream;
 }
 
 
 void ALiminalRoomGenerator::SpawnPrefabs()
 {
 	const TSoftObjectPtr<UWorld> EffectiveRoom = RoomLevel;
+	bool bFirstRoomSpawned = false;
+
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:474"), TEXT("SpawnPrefabs entry"), TEXT("{}"));
+	// #endregion
 
 	auto ComputeRotationForCell = [&](ELiminalCellType CellType) -> FRotator
 		{
@@ -531,6 +650,25 @@ void ALiminalRoomGenerator::SpawnPrefabs()
 			const FRotator Rot = ComputeRotationForCell(T);
 			SpawnCell(X, Y, Pick, FloorZ, TilePrefabOffsetLocal, Rot, false);
 
+			// Broadcast first room spawned event (only once, on first non-empty cell)
+			if (!bFirstRoomSpawned)
+			{
+				bFirstRoomSpawned = true;
+				
+				// #region agent log
+				LogDelegateState(TEXT("LiminalRoomGenerator.cpp:608"), TEXT("FirstRoomSpawned"), FirstRoomSpawned);
+				// #endregion
+				
+				const int32 BoundBefore = FirstRoomSpawned.GetAllObjects().Num();
+				const bool bFirstRoomIsBound = FirstRoomSpawned.IsBound();
+				UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] Broadcasting FirstRoomSpawned - Bound count: %d, IsBound: %d, Instance: %s"), BoundBefore, bFirstRoomIsBound ? 1 : 0, *GetName());
+				FirstRoomSpawned.Broadcast();
+
+				// #region agent log
+				WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:612"), TEXT("FirstRoomSpawned broadcast called"), FString::Printf(TEXT("{\"cellType\":%d,\"x\":%d,\"y\":%d,\"boundBefore\":%d}"), (int32)T, X, Y, BoundBefore));
+				// #endregion
+			}
+
 			if (bSpawnCeilings &&
 				T == ELiminalCellType::Room &&
 				!CeilingLevel.ToSoftObjectPath().IsNull())
@@ -589,7 +727,7 @@ void ALiminalRoomGenerator::SpawnPrefabs()
 		{
 			World->GetTimerManager().SetTimerForNextTick([this]()
 				{
-					GenerationComplete.Broadcast();
+					GenerationComplete.Broadcast(StartLevel);
 				});
 		}
 	}
@@ -655,9 +793,43 @@ void ALiminalRoomGenerator::SpawnWalls()
 void ALiminalRoomGenerator::HandleOneStreamedLevelLoaded()
 {
 	PendingStreamLoads = FMath::Max(0, PendingStreamLoads - 1);
+
+	// #region agent log
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:682"), TEXT("HandleOneStreamedLevelLoaded"), FString::Printf(TEXT("{\"PendingStreamLoads\":%d}"), PendingStreamLoads));
+	// #endregion
+
 	if (PendingStreamLoads == 0 && !bGenerationCompleteBroadcasted)
 	{
 		bGenerationCompleteBroadcasted = true;
-		GenerationComplete.Broadcast();
+		
+		// #region agent log
+		LogDelegateState(TEXT("LiminalRoomGenerator.cpp:735"), TEXT("GenerationComplete"), GenerationComplete);
+		// #endregion
+		
+		const int32 BoundBefore = GenerationComplete.GetAllObjects().Num();
+		const bool bGenCompleteAsyncIsBound = GenerationComplete.IsBound();
+		UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] Broadcasting GenerationComplete (async) - Bound count: %d, IsBound: %d, Instance: %s"), BoundBefore, bGenCompleteAsyncIsBound ? 1 : 0, *GetName());
+		GenerationComplete.Broadcast(StartLevel);
+
+		// #region agent log
+		WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:740"), TEXT("GenerationComplete broadcast called (async)"), FString::Printf(TEXT("{\"PendingStreamLoads\":%d,\"boundBefore\":%d}"), PendingStreamLoads, BoundBefore));
+		// #endregion
 	}
+}
+
+void ALiminalRoomGenerator::TestDelegateSystem(const FString& TestMessage)
+{
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] TestDelegateSystem called with message: %s, Instance: %s"), *TestMessage, *GetName());
+	
+	const int32 BoundCount = TestDelegate.GetAllObjects().Num();
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] TestDelegate bound count: %d"), BoundCount);
+	
+	// #region agent log
+	LogDelegateState(TEXT("LiminalRoomGenerator.cpp:TestDelegateSystem"), TEXT("TestDelegate"), TestDelegate);
+	WriteDebugLog(TEXT("LiminalRoomGenerator.cpp:TestDelegateSystem"), TEXT("TestDelegateSystem called"), FString::Printf(TEXT("{\"message\":\"%s\",\"boundCount\":%d}"), *TestMessage, BoundCount));
+	// #endregion
+	
+	TestDelegate.Broadcast(TestMessage);
+	
+	UE_LOG(LogTemp, Warning, TEXT("[LiminalRoomGen] TestDelegate.Broadcast() completed"));
 }

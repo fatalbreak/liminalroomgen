@@ -33,7 +33,19 @@ struct FLiminalCell
 };
 
 // Fired when all spawned Level Instances for a generation have finished loading.
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLiminalGenerationComplete);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLiminalGenerationComplete, TSoftObjectPtr<UWorld>, StartLevel);
+
+// Fired when generation starts.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLiminalGenerationStarted);
+
+// Fired when the first room is spawned.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLiminalFirstRoomSpawned);
+
+// Fired when generation stops (cleared).
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLiminalGenerationStopped);
+
+// Simple test delegate to verify delegate system works
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLiminalTestDelegate, FString, TestMessage);
 
 UCLASS(BlueprintType)
 class LIMINALROOMGEN_API ALiminalRoomGenerator : public AActor
@@ -209,9 +221,29 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Liminal|Generation")
 	void ClearRuntime();
 
+	/** Broadcast when generation starts. */
+	UPROPERTY(BlueprintAssignable, Category="Liminal|Generation")
+	FLiminalGenerationStarted GenerationStarted;
+
+	/** Broadcast when the first room is spawned. */
+	UPROPERTY(BlueprintAssignable, Category="Liminal|Generation")
+	FLiminalFirstRoomSpawned FirstRoomSpawned;
+
+	/** Broadcast when generation stops (cleared). */
+	UPROPERTY(BlueprintAssignable, Category="Liminal|Generation")
+	FLiminalGenerationStopped GenerationStopped;
+
 	/** Broadcast after all spawned Level Instances for the most recent GenerateRuntime() call are loaded & visible. */
 	UPROPERTY(BlueprintAssignable, Category="Liminal|Generation")
 	FLiminalGenerationComplete GenerationComplete;
+
+	/** TEST: Simple test delegate to verify delegate system works. */
+	UPROPERTY(BlueprintAssignable, Category="Liminal|Debug")
+	FLiminalTestDelegate TestDelegate;
+
+	/** TEST: Call this from Blueprint to test if delegates work. */
+	UFUNCTION(BlueprintCallable, Category="Liminal|Debug")
+	void TestDelegateSystem(const FString& TestMessage);
 
 	// --- Debug ---
 	UPROPERTY(Transient)
